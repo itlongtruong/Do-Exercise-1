@@ -1,12 +1,6 @@
 FROM php:7.1-fpm-alpine
 
-# Copy the php config file
-COPY ./docker/php/php-fpm.conf /etc/php/7.1/fpm/pool.d/www.conf
-
-# Copy the application code
-COPY . /code
-
-VOLUME ["/code"]
+RUN docker-php-ext-install mysqli
 
 
 RUN apk add --no-cache --update \
@@ -30,6 +24,7 @@ RUN apk add --no-cache --update \
     php7-pcntl \
     php7-pdo \
     php7-pdo_mysql \
+    php-mysqlnd \
     php7-phar \
     php7-redis \
     php7-session \
@@ -41,3 +36,13 @@ RUN apk add --no-cache --update \
     php7-zip \
     php7-zlib \
     php7-zmq
+
+# Copy the php config file
+COPY ./docker/php/php-fpm.conf /etc/php/7.1/fpm/pool.d/www.conf
+
+# Copy the application code
+COPY . /code
+
+VOLUME ["/code"]
+
+
