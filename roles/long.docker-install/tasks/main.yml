@@ -1,0 +1,46 @@
+---
+
+- name: check docker installed
+  command: docker --version
+  register: docker_existed
+  ignore_errors: true
+
+- name: install docker
+  shell: curl https://releases.rancher.com/install-docker/"{{ docker_version }}".sh | sh
+  when: docker_existed is failed
+
+- name: install docker-compose
+  command: curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-Linux-x86_64" -o /usr/local/bin/docker-compose
+  when: docker_existed is failed
+
+- name: docker-compose permission
+  command: chmod +x /usr/local/bin/docker-compose
+  when: docker_existed is failed
+
+- name: check user docker
+  command: groups | grep docker
+  register: user_docker
+  ignore_errors: true
+
+- name: add docker group
+  command: sudo groupadd docker
+  ignore_errors: true
+
+- name: add user to docker 
+  command: sudo usermod -aG docker vagrant
+  when: user_docker is failed
+
+- name: reload user group
+  command: newgrp docker
+  when: user_docker is failed
+
+- name: check docker start
+  command: docker ps
+  register: docker_started
+  ignore_errors: true
+
+- name: reload Deamon docker
+  command: sudo service docker start
+  when: docker_started is failed
+
+

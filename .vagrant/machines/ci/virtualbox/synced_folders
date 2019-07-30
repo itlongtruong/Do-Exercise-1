@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/ansible-playbook":{"owner":"root","group":"root","create":true,"mount_options":["fmode=777","dmode=777","uid=0","gid=0"],"guestpath":"/home/vagrant/ansible-playbook","hostpath":"/home/itlongtruong/Ex","disabled":false,"__vagrantfile":true}}}
